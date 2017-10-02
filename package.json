@@ -1,0 +1,22 @@
+{
+  "name": "vue-dialog",
+  "version": "1.0.0",
+  "description": "Vue插件",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kefong/vue-dialog.git"
+  },
+  "keywords": [
+    "Vue"
+  ],
+  "author": "Kefong.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kefong/vue-dialog/issues"
+  },
+  "homepage": "https://github.com/kefong/vue-dialog#readme"
+}
