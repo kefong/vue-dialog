@@ -1,10 +1,9 @@
-import dialogLink from './components/dialog-link'
-import dialogView from './components/dialog-view'
+import { install } from './install'
 
-var vueDialog = {};
-vueDialog.install = function (Vue, options) {
-	window.eventBus = new Vue();
-	Vue.component(dialogView.name, dialogView);
-	Vue.component(dialogLink.name, dialogLink);
+export default class VueDialog {	
+	constructor(options){
+		this.options = options;
+		//console.log(options);
+	}
 }
-export default vueDialog;
+VueDialog.install = install;
