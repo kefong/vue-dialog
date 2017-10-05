@@ -4,7 +4,7 @@
 <script>
 export default {
 	name: 'dialog-link',
-	props: ['width','height','title','model','to','html'],
+	props: ['width','height','title','model','to','html','type'],
 	data: function(){
 		return {
 			text: typeof(this.$slots.default) == 'undefined'?'':this.$slots.default[0].text
@@ -12,12 +12,13 @@ export default {
 	},
 	methods: {
 		open: function(){
-			eventBus.$emit('eventBusDialogOpen', {
+			this.$open({
 				to: this.to,
 				html: this.html,
 				width: this.width,
 				title: this.title,
-				model: this.model
+				model: this.model,
+				type: this.type
 			});
 		}
 	}

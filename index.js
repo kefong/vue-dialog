@@ -5,5 +5,8 @@ export default class VueDialog {
 		this.options = options;
 		//console.log(options);
 	}
+	test(){
+		console.log(test);
+	}
 }
 VueDialog.install = install;
