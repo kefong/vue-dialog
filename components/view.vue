@@ -6,27 +6,18 @@ export default {
 	data: function(){
 		return {
 			to: '',
+			_id: null,
 			html: '',
 			width: 0,
 			height: 0,
 			title: '',
 			model: true,
 			openStatus: false,
-			type: 'default'
+			type: 'default',
+			component:null
 		}
 	},
 	computed: {
-		ViewComponent: function(){
-			if(util.empty(this.to)){
-				return null;
-			}else{
-				var component = util.getComponentByPath(this._dialog.options.dialogs, this.to);
-				return component;
-			}			
-		},
-		Title: function(){
-			return this.title;
-		}
 	},
 	render: function(h){
 		var that = this;
@@ -68,7 +59,7 @@ export default {
 					h('div', { 'class': 'clearfix' }),
 					//内容
 					h('div', { 'class': 'dialog-body' }, [
-						h(that.ViewComponent)
+						h(that.component,'1')
 					])
 				]);
 				break;
@@ -78,7 +69,7 @@ export default {
 	created: function(){
 		var that = this;
 		bus.$on('busDialogOpen', function (options) {			
-			that.open(options);			
+			that.open(options);
 		});
 	},
 	methods: {
@@ -90,11 +81,17 @@ export default {
 			this.model = options.model;
 			this.openStatus = true;
 			this.type = options.type;
+			this.component = this.getComponent();
 			
 			this.$el.showModal();
 		},
 		close: function(){
+			this.component = null;
 			this.$el.close();
+		},
+		getComponent: function(){
+			util.getComponent(this._dialog.options.dialogs, this.to, this.$dialog);
+			return this.$dialog.current.component;
 		}
 	},
 }

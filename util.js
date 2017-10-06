@@ -14,16 +14,25 @@ export default {
 	{
 		return typeof(str) == 'undefined' || str == null || str == undefined || str == '';
 	},
-	/**
-	 * 通过地址获取component
-	 */
-	getComponentByPath: function(dialogs, path){
-		var component;
-		dialogs.forEach(function(n, i){
-			if(path == n.path){
-				component = n.component;
-			}
-		});
-		return component;
+	getComponent: function(dialogs, to, dialog){
+		//判断是否为字符串
+		if(typeof(to) === 'string'){
+			dialogs.forEach(function(n, i){
+				if(to == n.path){
+					dialog.current.component = n.component;
+					dialog.current.cpath = n.path;
+					dialog.current.name = n.name;
+				}
+			});			
+		}else{
+			dialog.current.name = to.name;
+			dialog.current.params = to.params;
+			dialogs.forEach(function(n, i){
+				if(to.name == n.name){
+					dialog.current.component = n.component;
+				}
+			});
+		}
+		return dialog.current.component;
 	}
 }

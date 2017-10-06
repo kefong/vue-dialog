@@ -8,6 +8,9 @@ export default {
 			},
 			domProps: {
 				innerHTML: this.$slots.default[0].text
+			},
+			attrs: {
+				
 			}
 		})
 	},
@@ -16,7 +19,7 @@ export default {
 		return {}
 	},
 	methods: {
-		open: function(){
+		open: function(){			
 			this.$open({
 				to: this.to,
 				html: this.html,

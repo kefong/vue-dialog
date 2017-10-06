@@ -1,5 +1,5 @@
-import dialogLink from './components/dialog-link'
-import dialogView from './components/dialog-view'
+import link from './components/link'
+import view from './components/view'
 
 export function install(Vue, options){
 	const isDef = v => v !== undefined;
@@ -7,12 +7,12 @@ export function install(Vue, options){
 	//用于不同组件中的事件中转
 	window.bus = new Vue();
 	
-	Vue.component(dialogView.name, dialogView);
-	Vue.component(dialogLink.name, dialogLink);
+	Vue.component(view.name, view);
+	Vue.component(link.name, link);
 	Vue.mixin({
 		beforeCreate: function(){
+			//设置弹窗组件类
 			if(isDef(this.$options.dialog)){
-				//this._dialogRoot = this;
 		        Vue.prototype._dialog = this.$options.dialog;
 			}
 		},
@@ -21,7 +21,7 @@ export function install(Vue, options){
 			//console.log(this.$options.dialog);
 		},
 		destroyed: function(){
-			console.log('destroyed');
+			//console.log('destroyed');
 		}
 	});
 	
