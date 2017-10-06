@@ -42,6 +42,7 @@ export default {
 			case 'confirm':
 				break;
 			default:
+				test = that.component;
 				element = h('dialog', [
 					h('div', { 'class': 'dialog-header' }, [
 						//标题
@@ -59,7 +60,7 @@ export default {
 					h('div', { 'class': 'clearfix' }),
 					//内容
 					h('div', { 'class': 'dialog-body' }, [
-						h(that.component,'1')
+						h(that.component)
 					])
 				]);
 				break;
@@ -71,8 +72,14 @@ export default {
 		bus.$on('busDialogOpen', function (options) {			
 			that.open(options);
 		});
+		bus.$on('busDialogInitialize', function(data){
+			that.initialize(data);
+		})
 	},
 	methods: {
+		initialize: function(data){
+			this.title = data.title;
+		},
 		open: function(options){
 			this.to = options.to;
 			this.html = options.html;
@@ -100,9 +107,15 @@ export default {
 .clearfix {
 	clear: both;
 }
-.dialog-header {}
+.dialog-header {
+	float: left;
+	width: 100%;
+	margin-bottom: 0.3em;
+}
 .dialog-title {
 	float: left;
+	font-size: 1.2em;
+	font-weight: bold;
 }
 .dialog-buttons {
 	float: right;

@@ -9,7 +9,8 @@ export default class VueDialog {
 				path: null,
 				query: null,
 				fullPath: null,
-				component: null
+				component: null,
+				title: ''
 		}
 	}
 	//获取当前窗口

@@ -16,9 +16,13 @@ export function install(Vue, options){
 		        Vue.prototype._dialog = this.$options.dialog;
 			}
 		},
-		created: function(){
-			//console.log('created');
-			//console.log(this.$options.dialog);
+		updated: function(){
+			var that = this;
+			if(isDef(that.title)){
+				bus.$emit('busDialogInitialize', {
+					title: that.title
+				});
+			}			
 		},
 		destroyed: function(){
 			//console.log('destroyed');
