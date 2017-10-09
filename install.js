@@ -1,9 +1,7 @@
 import link from './components/link'
 import view from './components/view'
 
-export function install(Vue, options){
-	const isDef = v => v !== undefined;
-	
+export function install(Vue, options){	
 	//用于不同组件中的事件中转
 	window.bus = new Vue();
 	
@@ -12,13 +10,13 @@ export function install(Vue, options){
 	Vue.mixin({
 		beforeCreate: function(){
 			//设置弹窗组件类
-			if(isDef(this.$options.dialog)){
+			if(typeof(this.$options.dialog) !== 'undefined'){
 		        Vue.prototype._dialog = this.$options.dialog;
 			}
 		},
 		updated: function(){
 			var that = this;
-			if(isDef(that.title)){
+			if(typeof(that.title) !== 'undefined'){
 				bus.$emit('busDialogInitialize', {
 					title: that.title
 				});
@@ -51,6 +49,6 @@ export function install(Vue, options){
 	}
 	
 	Object.defineProperty(Vue.prototype, '$dialog', {
-		get () { return this._dialog }
+		get: function() { return this._dialog }
 	})
 }
