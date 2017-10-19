@@ -1,142 +1,212 @@
 <script>
-import util from '../util'
+require('../css/iconfont/iconfont.css')
 export default {
 	name: 'dialog-view',
-	//functional: true,//深度？
-	data: function(){
-		return {
-			to: '',
-			_id: null,
-			html: '',
-			width: 0,
-			height: 0,
-			title: '',
-			model: true,
-			openStatus: false,
-			type: 'default',
-			component:null
-		}
-	},
-	computed: {
-	},
 	render: function(h){
-		var that = this;
-		var element;
-		switch(this.type){
-			case 'alert':
-				element = h('dialog', [
-					h('div', {
-						'class': 'dialog-body',
-						domProps: {
-							innerHTML: this.html
-						}
-					}),
-					h('button', {
-						'class': 'dialog-btn dialog-btn-ok',
-						on: {
-							click: this.close
-						}
-					},'OK')
-				]);
-				break;
-			case 'confirm':
-				break;
-			default:
-				test = that.component;
-				element = h('dialog', [
-					h('div', { 'class': 'dialog-header' }, [
-						//标题
-						h('div', { 'class': 'dialog-title' }, this.title),
-						//按钮（如：关闭、最小化等）
-						h('div', { 'class': 'dialog-buttons' }, [
-							h('div', {
-								'class': 'dialog-close',
-								on: {
-									click: this.close
-								}
-							})
-						])
-					]),
-					h('div', { 'class': 'clearfix' }),
-					//内容
-					h('div', { 'class': 'dialog-body' }, [
-						h(that.component)
+		if(this.status === true) {
+			var win = h('div', { 
+				'class': 'kefong-vue-dialog',
+				style: {
+					width: this.width + 'px',
+					top: this.top + 'px',
+					left: this.left + 'px',
+				}
+			}, [
+				h('div', { 
+					'class': 'kefong-dialog-header',
+					on: {
+						mousedown: this.mousedown
+					}
+				}, [
+					//标题
+					h('div',{
+						'class': 'kefong-dialog-title'							
+					}, this.title),
+					//按钮（如：关闭、最小化等）
+					h('div', { 'class': 'kefong-dialog-buttons' }, [
+						h('div', {
+							'class': 'kefong-dialog-close',
+							on: {
+								click: this.hide
+							}
+						})
+					])
+				]),
+				h('div', { 'class': 'clearfix' }),
+				//内容
+				h('div', { 'class': 'kefong-dialog-body' }, [
+					h(this.component),
+				])
+			]);
+			
+			// backdrop
+			if(this.backdrop === true){
+				return h('transition', {
+					attrs: {
+						name: 'kefong-fade'
+					}
+				}, [					
+					h('div', [
+						h('div', {
+							'class': 'kefong-vue-dialog-backdrop'
+						}),
+						win
 					])
 				]);
-				break;
-		}
-		return element;
+			}else{
+				return win;
+			}			
+		} else {
+			return null;
+		}	
 	},
-	created: function(){
-		var that = this;
-		bus.$on('busDialogOpen', function (options) {			
-			that.open(options);
-		});
-		bus.$on('busDialogInitialize', function(data){
-			that.initialize(data);
-		})
+	data: function(){
+		return {
+			to: {
+				name: null,
+				params: {}
+			},
+			status: true,
+			title: 'title',
+			component: null,
+			backdrop: true,
+			width: 200,
+			top:10,
+			left:0,
+		}
+	},
+	mounted: function(){
+		const that = this;
+		
+		this.title = this.$children[0].title;
+		this.width = this.to.width;
+		this.refreshLeft();
+		// 窗口大小更改触发
+		window.onresize = function(){
+			if(that.status === true) that.refreshLeft();			
+		}
 	},
 	methods: {
-		initialize: function(data){
-			this.title = data.title;
+		hide: function(){
+			this.status = false;
 		},
-		open: function(options){
-			this.to = options.to;
-			this.html = options.html;
-			this.width = options.width;
-			this.title = typeof(options.title) == 'undefined'?'':options.title;
-			this.model = options.model;
-			this.openStatus = true;
-			this.type = options.type;
-			this.component = this.getComponent();
+		// 计算left
+		refreshLeft: function(){
+			var left = ((document.documentElement.clientWidth - this.width) / 2);		
+			this.left = left > 0? left: 0;
+		},
+		// 移动
+		mousedown: function(e){
+			var that = this;
+			//console.log(e);
+			var event1 = e || window.event;
+			var eventX = event1.offsetX || event1.layerX;
+			var eventY = event1.offsetY || event1.layerY;
 			
-			this.$el.showModal();
-		},
-		close: function(){
-			this.component = null;
-			this.$el.close();
-		},
-		getComponent: function(){
-			util.getComponent(this._dialog.options.dialogs, this.to, this.$dialog);
-			return this.$dialog.current.component;
+			var flag = true;
+			var dialog = this.$el;
+			
+			// 按下鼠标并移动
+			dialog.onmousemove = function(e) {				
+				if(flag) {
+					var event2 = e || window.event;
+					var eveX = event2.clientX;
+					var eveY = event2.clientY;
+					that.top = eveY - eventY;
+					that.left = eveX - eventX;
+					//console.log(that.left);
+				}
+			}
+			
+			// 抬起鼠标
+			dialog.onmouseup = function(e) {
+				if(flag) {
+					flag = false;
+				}
+			}
 		}
-	},
+	}
 }
 </script>
 <style scoped>
+.kefong-vue-dialog {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+	padding: 0px;
+	position: absolute;
+	top: 16px;
+	left: 600px;
+}
+.kefong-vue-dialog-backdrop { /* native */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  width:100%;
+  height:100%;
+}
+.kefong-vue-dialog + .backdrop { /* polyfill */
+  background-color: green;
+}
 .clearfix {
 	clear: both;
 }
-.dialog-header {
+.kefong-dialog-header {
 	float: left;
 	width: 100%;
-	margin-bottom: 0.3em;
+	background-color: #f3f3f3;
+	line-height: 26px;
+	height: 28px;
 }
-.dialog-title {
+.kefong-dialog-title {
 	float: left;
-	font-size: 1.2em;
-	font-weight: bold;
+	font-size: 1em;
+	/*font-weight: bold;*/
+	padding-left: 6px;
 }
-.dialog-buttons {
+.kefong-dialog-title:BEFORE {
+	font-family:"iconfont" !important;
+	content: "\e61b";
+	vertical-align:middle;
+	display:inline-block;
+	font-size: 1.5em;
+	padding-right: 4px;
+	margin-top: -2px;
+	margin-left: -2px;
+}
+.kefong-dialog-buttons {
 	float: right;
+	padding-right: 4px;
 }
-.dialog-close {
+.kefong-dialog-close {
 	cursor: pointer;
 	color: #f3f3f3;
+	padding: 0px 5px 0px 5px;
+	line-height: 20px;
+	margin-top: 4px;
+	font-family: "宋体";
 }
-.dialog-close:after {
+.kefong-dialog-close:after {
 	content: "\2716";
-	color: #f3f3f3;
+	color: #666;
 }
-.dialog-close:hover {
-	background-color: #f3f3f3;
+.kefong-dialog-close:hover {
+	background-color: #FF5722;
+	color: #FF5722;	
+}
+.kefong-dialog-close:hover:after {
+	content: "\2716";
 	color: #fff;
 }
-.dialog-body {
+.kefong-dialog-body {
 	min-width: 200px;
-	margin-bottom: 6px;
+	padding: 3px 6px 8px 6px;
 }
-.dialog-btn {
+.kefong-dialog-btn {
 	display: inline-block;
 	margin-bottom: 0;
 	padding: 0.5em 1em;
@@ -158,18 +228,25 @@ export default {
 	-webkit-transition: background-color 300ms ease-out, border-color 300ms ease-out;
 	transition: background-color 300ms ease-out, border-color 300ms ease-out;
 }
-.dialog-btn:hover {
+.kefong-dialog-btn:hover {
 	color: #444;
 	text-decoration: none;
 }
-.dialog-btn-ok {
+.kefong-dialog-btn-ok {
 	color: #fff;
 	background-color: #0e90d2;
 	border-color: #0e90d2;
 }
-.dialog-btn-ok:hover {
+.kefong-dialog-btn-ok:hover {
 	color: #fff;
 	border-color: #0a6999;
 	background-color: #0c79b1;
+}
+
+.kefong-fade-enter-active, .kefong-fade-leave-active {
+  transition: opacity 0.25s
+}
+.kefong-fade-enter, .kefong-fade-leave-to {
+  opacity: 0
 }
 </style>

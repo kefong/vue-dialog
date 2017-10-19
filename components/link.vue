@@ -4,7 +4,7 @@ export default {
 	render: function(h){
 		return h('a', {
 			on: {
-				click: this.open
+				click: this.show
 			},
 			domProps: {
 				innerHTML: this.$slots.default[0].text
@@ -14,20 +14,18 @@ export default {
 			}
 		})
 	},
-	props: ['width','height','title','model','to','html','type'],
+	props: {
+		to: {
+			type: [String, Object],
+			required: true
+		}
+	},
 	data: function(){
 		return {}
 	},
 	methods: {
-		open: function(){			
-			this.$open({
-				to: this.to,
-				html: this.html,
-				width: this.width,
-				title: this.title,
-				model: this.model,
-				type: this.type
-			});
+		show: function(){
+			this.$_dialog(this.to);
 		}
 	}
 }
