@@ -97,7 +97,7 @@ export default {
 		},
 		// 移动
 		mousedown: function(e){
-			var that = this;
+			/*var that = this;
 			//console.log(e);
 			var event1 = e || window.event;
 			var eventX = event1.offsetX || event1.layerX;
@@ -123,7 +123,7 @@ export default {
 				if(flag) {
 					flag = false;
 				}
-			}
+			}*/
 		}
 	}
 }
