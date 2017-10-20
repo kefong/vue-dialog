@@ -78,6 +78,7 @@ export default {
 	created: function(){
 	},
 	mounted: function(){
+		var that = this;
 		// 必须在mounted获取title, created获取不到
 		this.title = this.$children[0].title;
 		this.width = typeof(this.to.width) === 'undefined'? 0 : this.to.width;
