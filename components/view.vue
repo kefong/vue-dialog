@@ -80,7 +80,7 @@ export default {
 	mounted: function(){
 		var that = this;
 		// 必须在mounted获取title, created获取不到
-		this.title = this.$children[0].title;
+		this.title = typeof(this.$children[0].title) === 'undefined'? '' : this.$children[0].title;
 		this.width = typeof(this.to.width) === 'undefined'? 0 : this.to.width;
 		
 		// 窗口大小更改触发
