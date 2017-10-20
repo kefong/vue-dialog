@@ -7,7 +7,7 @@ export default {
 			var win = h('div', { 
 				'class': 'kefong-vue-dialog',
 				style: {
-					width: this.width + 'px',
+					width: (this.width === 0? null : (this.width + 'px')),
 					top: this.top + 'px',
 					left: this.left + 'px',
 				}
@@ -70,21 +70,29 @@ export default {
 			title: 'title',
 			component: null,
 			backdrop: true,
-			width: 200,
+			width: 0,
 			top:10,
 			left:0,
 		}
 	},
+	created: function(){
+	},
 	mounted: function(){
-		const that = this;
-		
+		// 必须在mounted获取title, created获取不到
 		this.title = this.$children[0].title;
-		this.width = this.to.width;
-		this.refreshLeft();
+		this.width = typeof(this.to.width) === 'undefined'? 0 : this.to.width;
+		
 		// 窗口大小更改触发
 		window.onresize = function(){
 			if(that.status === true) that.refreshLeft();			
 		}
+	},
+	updated: function(){
+		// 整个视图都重绘完毕后执行
+		this.$nextTick(function () {
+			this.width = this.width === 0? this.$children[0].$el.offsetWidth : this.width;
+			this.refreshLeft();
+		})
 	},
 	methods: {
 		hide: function(){
