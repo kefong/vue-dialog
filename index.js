@@ -48,6 +48,10 @@ VueDialog.install = function(Vue, options){
 		v.to = to;
 		v.component = VueDialogConfig._component(to.name);
 		VueDialogConfig._to = to;
+		/**
+		 * 关闭窗口
+		 * 使用方法：this.$dialog.close();
+		 */
 		VueDialogConfig._to.close = function(){
 			v.hide();
 		}
