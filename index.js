@@ -48,6 +48,9 @@ VueDialog.install = function(Vue, options){
 		v.to = to;
 		v.component = VueDialogConfig._component(to.name);
 		VueDialogConfig._to = to;
+		VueDialogConfig._to.close = function(){
+			v.hide();
+		}
 		
 		VueDialogConfig._el.appendChild(v.$mount().$el);
 	}
