@@ -91,14 +91,21 @@ export default {
 	updated: function(){
 		// 整个视图都重绘完毕后执行
 		this.$nextTick(function () {
+			window.addEventListener('scroll', this.onScroll);
 			this.width = this.width === 0? this.$children[0].$el.offsetWidth : this.width;
 			this.refreshLeft();
+			this.onScroll();
 		})
 	},
 	methods: {
 		hide: function(){
 			this.status = false;
 			this.$_hide();
+		},
+		onScroll: function(){
+			var top = document.documentElement.scrollTop || document.body.scrollTop;
+			//console.log(top);
+			this.top = top + 6;
 		},
 		// 计算left
 		refreshLeft: function(){
