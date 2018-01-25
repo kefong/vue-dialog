@@ -5,6 +5,7 @@
 import Link from './components/link'
 import View from './components/view'
 var VueDialogConfig = {
+		_vlist:[],
 		_el: null,
 		_opt: null,
 		_to: null,
@@ -48,12 +49,18 @@ VueDialog.install = function(Vue, options){
 		v.to = to;
 		v.component = VueDialogConfig._component(to.name);
 		VueDialogConfig._to = to;
+		//将每个弹出层都加到清单中
+		VueDialogConfig._vlist.push(v);
 		/**
 		 * 关闭窗口
 		 * 使用方法：this.$dialog.close();
 		 */
 		VueDialogConfig._to.close = function(){
-			v.hide();
+			//v.hide();
+			//关闭最后一个弹窗
+			VueDialogConfig._vlist.slice(-1)[0].hide();
+			//将关闭的弹窗从列表中删除
+			VueDialogConfig._vlist.pop();
 		}
 		
 		VueDialogConfig._el.appendChild(v.$mount().$el);
