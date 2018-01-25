@@ -98,6 +98,7 @@ export default {
 	methods: {
 		hide: function(){
 			this.status = false;
+			this.$_hide();
 		},
 		// 计算left
 		refreshLeft: function(){

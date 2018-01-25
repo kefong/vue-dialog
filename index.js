@@ -59,11 +59,14 @@ VueDialog.install = function(Vue, options){
 			//v.hide();
 			//关闭最后一个弹窗
 			VueDialogConfig._vlist.slice(-1)[0].hide();
-			//将关闭的弹窗从列表中删除
-			VueDialogConfig._vlist.pop();
 		}
 		
 		VueDialogConfig._el.appendChild(v.$mount().$el);
+	}
+
+	Vue.prototype.$_hide = function(){
+		//将关闭的弹窗从列表中删除
+		VueDialogConfig._vlist.pop();
 	}
 	
 	Object.defineProperty(Vue.prototype, '$dialog', {
