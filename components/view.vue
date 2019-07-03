@@ -155,9 +155,6 @@ export default {
 	position: absolute;
 	top: 16px;
 	left: 600px;
-	overflow-y:auto;
-	height:auto;
-	max-height:600px;
 }
 .kefong-vue-dialog-backdrop { /* native */
   position: fixed;
@@ -225,6 +222,9 @@ export default {
 .kefong-dialog-body {
 	min-width: 200px;
 	padding: 3px 6px 8px 6px;
+	overflow-y:auto;
+	height:auto;
+	max-height:560px;
 }
 .kefong-dialog-btn {
 	display: inline-block;
